@@ -1,0 +1,168 @@
+% default 12pt
+\documentclass[12pt]{article}
+ 
+% \usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,scrextend,bm}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{pgfpages}
+% % For shrinking 4 pages to 1
+% \pgfpagesuselayout{4 on 1}[a4paper, border shrink=0mm]
+% 2 in 1
+% \pgfpagesuselayout{2 on 1}[a4paper, border shrink=0mm, landscape]
+
+\setlength{\parskip}{0em}
+\setlist[enumerate]{itemsep=0mm}
+\setlist[itemize]{itemsep = 0mm}
+
+\theoremstyle{definition}
+\newtheorem{definition}{DEFINITION}[subsection]
+
+
+\pagestyle{fancy}
+
+\let\newproof\proof
+\renewenvironment{proof}{\begin{addmargin}[1em]{0em}\begin{newproof}}{\end{newproof}\end{addmargin}\qed}
+
+\newtheorem{theorem}{THEOREM}[subsection]
+
+\newcommand{\norm}[1]{\lVert #1 \rVert}
+\newcommand{\uline}[1]{\rule[0pt]{#1}{0.4pt}}
+\newcommand{\trace}[1]{\text{tr}(#1)}
+\newcommand{\Hom}{\text{Hom}}
+\newcommand{\Maps}{\text{Maps}}
+\newcommand{\image}{\text{im}}
+\newcommand{\Mat}{\text{Mat}}
+\newcommand{\suchthat}{\textit{ s.t. }}
+\newcommand{\sgn}{\textbf{sgn}}
+\newcommand{\adj}{\text{adj}}
+\newcommand{\diag}{\text{diag}}
+\newcommand{\transpose}[1]{#1^\mathsf{T}}
+\newcommand{\Prob}[1]{\mathbb{P}(#1)}
+\newcommand{\Expect}[1]{\mathbb{E}(#1)}
+\newcommand{\Var}[1]{\text{Var}(#1)}
+\newcommand{\Cov}[1]{\text{Cov}(#1)}
+
+%Set the course name here
+\newcommand{\coursename}{Honours Algebra}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+
+\newtcbtheorem[number within=section]{mytheo}{Theorem}
+{colback=red!5,colframe=red!35!black,fonttitle=\bfseries}{th}
+\newtheorem{lemma}{LEMMA}[subsection]
+\newtheorem{prop}{PROPOSITION}[subsection]
+\newtheorem{corollary}{COROLLARY}[subsection]
+\newtheorem{example}{EXAMPLE}[subsection]
+ 
+\lhead{\coursename}
+\rhead{Quick Notes}
+
+\title{\coursename\\Quick Notes}
+\author{Ian S.W. Ma}
+\date{Spring 2020}
+
+ 
+ 
+\begin{document}
+\maketitle
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+\pagenumbering{gobble}
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% Section 1
+\section{Statistics Basics}
+    \subsection*{General Structure: Probability Space/Triple}
+    Probability Space/Triple $(\Omega, \mathcal{F}, \mathbb{P})$
+    \begin{itemize}
+        \item $\Omega$: \textbf{Sample Space}, set of all posible outcomes.
+        \item $\mathcal{F}$: \textbf{Set of events \(\sigma\)}, each event is a subset of $\Omega$
+        \item $\mathbb{P}$ Probability of event $\sigma \in \mathcal{F}$
+    \end{itemize}
+    \subsection*{Conditional Probability}
+    Conditional probability of $A$ given $B$: $\Prob{A|B} = \frac{\Prob{A \cap B}}{\Prob{B}} \Leftrightarrow \Prob{A|B}\Prob{B} = \Prob{A \cap B}$
+    \subsection*{General properties}
+    \begin{itemize}
+        \item $\Prob{A \cup B} = \Prob{A} + \Prob{B} - \Prob{A \cap B}$
+            \subitem Events are mutually exclusive $\Rightarrow \Prob{A \cap B} = 0$
+        \item $\Prob{A \cap B} = \Prob{A|B}\Prob{B}$
+            \subitem Events are independent $\Rightarrow \Prob{A|B} = \Prob{A}$
+        \item Law of Total Probability
+            \subitem If events $A_1, A_2, A_N$ are mutually exclusive and exhaustive ($\bigcup_{i = 1}^N A_i = \Omega$) then:
+            $$\Prob{B} = \sum_{i=1}^N \Prob{A_i \cap B} = \sum_{i=1}^N \Prob{B|A_i}\Prob{A_i}$$
+    \end{itemize}
+    \subsection*{Random Variables}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        $X \sim$ Distribution & $\Expect{X}$ & $\Var{X}$\\
+        \hline
+        Normal$(\mu, \sigma^2)$ & $\mu$ & $\sigma^2$\\
+        \hline
+        Bernoulli$(\theta)$ & $\theta$ & $\theta(1-\theta)$\\
+        \hline
+        Binomial$(\theta)$ & $n\theta$ & $n\theta(1-\theta)$\\
+        \hline
+        Poisson$(\mu)$ & $\mu$ & $\mu$\\
+        \hline
+        Uniform$(\alpha, \beta)$ & $\frac{\alpha + \beta}{2}$ & $\frac{(\alpha + \beta)^2}{12}$\\
+        \hline
+        Beta$(\alpha, \beta)$ & $\frac{\alpha}{\alpha + \beta}$ & $\frac{\alpha\beta}{(\alpha + \beta)^2(\alpha + \beta+1)}$\\
+        \hline
+        Gamma$(\alpha, \beta)$ & $\frac{\alpha}{\beta}$ & $\frac{\alpha}{\beta^2}$\\
+        \hline
+        Inv. Gamma$(\alpha, \beta)$ & $\frac{\beta}{\alpha -1}$ & $\frac{\beta^2}{(\alpha-1)^2(\alpha -2)}$\\
+        \hline
+        Exponential$(\lambda)$ & $\frac{1}{\lambda}$ & $\frac{1}{\lambda^2}$\\
+        \hline
+    \end{tabular}
+    \subsection*{Random Vectors}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        $\mathbf{X} = X_1,...,X_k \sim$ Distribution & $\Expect{X_i}$ & $\Var{X_i}$ & $\Cov{X_i,X_j}$\\
+        \hline
+        Multivariative Normal$(\bm{\mu}, \Sigma)$ & $\mu_i$ & $\Sigma_{i,i}$ & $\Sigma_{i,j}$\\
+        \hline
+        Multinomial$(n,\theta_1,...,\theta_k)$ & $n\theta_i$ & $n(1-\theta_i)$ & $-n\theta_i\theta_j$\\
+        \hline
+    \end{tabular}
+
+
+\pagebreak
+\section{Bayes Throrem}
+    \subsection*{Discrete Case}
+    \begin{align*}
+        \Prob{X=x_i| Y = y_j} &= \frac{\Prob{X = x_i, Y = y_j}}{\Prob{Y = y_j}}\\
+        &= \frac{\Prob{Y = y_j|X=x_i} \Prob{X = x_i}}{\Prob{Y = y_j}}\\
+        &= \frac{\text{Likelihood}\times \text{Prior}}{\text{Marginal}}\\
+        &= \frac{\Prob{Y = y_j|X=x_i} \Prob{X = x_i}}{\sum_{k=1}^n\Prob{X = x_k,Y = y_j}}\\
+        &= \frac{\Prob{Y = y_j|X=x_i} \Prob{X = x_i}}{\sum_{k=1}^n\Prob{Y = y_j|X = x_k}P(X = x_k)}\\
+        \Rightarrow \Prob{(X|Y)} &= \frac{\Prob{Y|X} \Prob{X}}{\sum_x \Prob{X = x,Y}} = \frac{\text{Likelihood}\times \text{Prior}}{\text{Marginal}} 
+    \end{align*}
+    \subsection*{Continous Case}
+        $$f(X|Y) = \frac{f(X,Y)}{g(Y)} = \frac{g(Y|X) f(X)}{\int g(Y|X)f(X) dX}$$
+
+\subsection*{Bayesian Statistical Inference}
+\begin{itemize}
+    \item $L(\theta|y) = f(y|\theta)$: Likelihood
+    \item $\pi(\theta)$: Prior
+    \item $m(y) = p(y)$: Marginal distribution/Normalizing constant
+\end{itemize}
+$$\text{Posterior Distribution: } p(\theta|y) = \frac{f(y|\theta)\pi(\theta)}{\int p(\theta,y)d\theta} = \frac{f(y|\theta)\pi(\theta)}{\int f(y|\theta)\pi(\theta) d\theta} \propto f(y|\theta)\pi(\theta)$$
+\subsection*{Predictive Distrubutions}
+\begin{align*}
+    \text{Prior Predictive Distribution} &\text{:} &p(y^{new}) &= \int_\theta f(y^{new}|\theta)\pi(\theta)d\theta\\
+    \text{Posterior Predictive Distribution} &\text{:} &p(y^{new}|y^{old}) &= \int_\theta f(y^{new}|\theta,y^{old})p(\theta|y^{old})d\theta
+\end{align*}
+
+\end{document}
