@@ -299,4 +299,74 @@ $$\Prob{\Theta|\bm{y}} = \frac{\Prob{\bm{y}|\Theta}\Prob{\Theta}}{\Prob{\bm{y}}}
         \item Conditional on $H_0$ being true, $p$-value $= \Prob{T(\bm{y})\text{ more extreme than } T(\bm{y}_{obs})|\theta, H_0}$
         \item Reject $H_0$ and accept $H_1$ for sufficiently small $p$-values, do not reject $H_0$ otherwise
     \end{enumerate}
+
+\section{Bayesian Hypothesis Testing}
+Suppose there are tow hypotheses about parameter $\theta$:
+$$H_0:\theta \in \Theta_1 \quad H_1:\theta \in \Theta_1$$
+where $\Theta_0 \cup \Theta_1 = \Theta$ and $\Theta_0 \cap \Theta_1 = \emptyset$.
+\\~\\
+The Bayesian approach specifies prior probabilities on each hypotheses:
+\begin{align*}
+    p_0 &= \Prob{H_0 \text{ is true}} = \Prob{\theta \in \Theta_0}\\
+    p_1 &= \Prob{H_1 \text{ is true}} = \Prob{\theta \in \Theta_1}
+\end{align*}
+Where the posteriors are as follows:
+\begin{align*}
+    \Prob{H_0|\bm{y}} &= \Prob{\theta \in \Theta_0|\bm{y}}\\
+    \Prob{H_1|\bm{y}} &= \Prob{\theta \in \Theta_1|\bm{y}}
+\end{align*}
+Where $\Prob{H_0|\bm{y}} + \Prob{H_1|\bm{y}} = 1$
+\newpage
+\subsection*{Simple}
+\begin{itemize}
+    \item Single parameter values $H_0:\theta = \theta_0 \quad H_1:\theta = \theta_1$
+    \item Posteriors:
+        \begin{align*}
+            \Prob{H_0|\bm{y}} &= \Prob{\theta = \theta_0|\bm{y}} = \frac{f(\bm{y}|\theta_0)p_0}{m(\bm{y})} = \frac{f(\bm{y}|\theta_0)p_0}{f(\bm{y}|\theta_0)p_0 + f(\bm{y}|\theta_1)p_1}\\
+            \Prob{H_1|\bm{y}} &= \Prob{\theta = \theta_1|\bm{y}} = \frac{f(\bm{y}|\theta_1)p_1}{m(\bm{y})} = \frac{f(\bm{y}|\theta_1)p_1}{f(\bm{y}|\theta_0)p_0 + f(\bm{y}|\theta_1)p_1}\\
+            \Prob{H_0|\bm{y}} &= 1 - \Prob{H_1|\bm{y}}
+        \end{align*}
+    \item posterior odds of $H_0$ against $H_1$:
+        $$\frac{\Prob{H_0|\bm{y}}}{\Prob{H_1|\bm{y}}} = \frac{f(\bm{y}|\theta_0)p_0}{f(\bm{y}|\theta_1)p_1}$$
+\end{itemize}
+\subsection*{Composite}
+\begin{itemize}
+    \item Single parameter values $H_0:\theta \in \Theta_0 \quad H_1:\theta \in \Theta_1$
+    \item Prior: $p_i = \int_{\theta \in \Theta_i}\pi(\theta) d\theta$
+    \item Posteriors:
+        \begin{align*}
+            \Prob{H_i|\bm{y}} &= \frac{p(\bm{y},H_i)}{m(\bm{y})} = \frac{p_i\ p(\bm{y}|H_i)}{m(\bm{y})} = \frac{p_i\int p(\bm{y},\theta|H_i)d\theta}{m(\bm{y})} = \frac{p_i\int f(\bm{y}|\theta)\pi(\theta|H_i) d\theta}{m(\bm{y})}\\
+            &= \frac{p_i\int_{\theta \in \Theta_i} f(\bm{y}|\theta)\frac{\pi(\theta)}{p_i} d\theta}{m(\bm{y})} = \frac{\int_{\theta \in \Theta_i} f(\bm{y}|\theta)\pi(\theta) d\theta}{m(\bm{y})} = \int_{\theta \in \Theta_i} p(\theta|\bm{y}) d\theta = \Prob{\theta \in \Theta_i|\bm{y}}
+        \end{align*}
+    \item posterior odds of $H_0$ against $H_1$:
+        $$\frac{\Prob{H_0|\bm{y}}}{\Prob{H_1|\bm{y}}} = \frac{\int_{\theta \in \Theta_0}f(\bm{y}|\theta) \pi(\theta)d\theta}{\int_{\theta \in \Theta_1}f(\bm{y}|\theta) \pi(\theta)d\theta} = \frac{\Prob{\theta \in \Theta_0|\bm{y}}}{\Prob{\theta \in \Theta_1|\bm{y}}} = \frac{\Prob{\theta \in \Theta_0|\bm{y}}}{1-\Prob{\theta \in \Theta_0|\bm{y}}}$$
+\end{itemize}
+\subsection*{Multiple models}
+\begin{itemize}
+    \item Set of models $M_1,...,M_K$
+    \item $H_i$: The correct model is $M_i$
+    $$\Prob{H_i|\bm{y}} = \frac{\Prob{H_i, \bm{y}}}{\Prob{\bm{y}}} = \frac{\Prob{H_i, \bm{y}}}{\sum_{j=1}^K \Prob{H_j,\bm{y}}}$$
+\end{itemize}
+\newpage
+\section*{Bayes Factor}
+\begin{itemize}
+    \item Prior odds for $H_0$ against $H_1 = {p_0}/{p_1}$
+    \item Posterior odds for $H_0$ against $H_1 = \Prob{H_0|\bm{y}}/\Prob{H_1|\bm{y}}$
+    \item Bayes Factor for $H_0$ against $H_1$:
+        \begin{align*}
+            BF_{01} &= \frac{\text{Posterior odds for $H_0$ against $H_1$}}{\text{Prior odds for $H_0$ against $H_1$}} = \frac{\Prob{H_0|\bm{y}}/\Prob{H_1|\bm{y}}}{p_0/p_1}\\
+            BF_{10} &= \frac{1}{BF_{01}}
+        \end{align*}
+\end{itemize}
+\begin{center}
+    \begin{tabular}{|c|r|}
+        \hline
+        $BF_{ij}$ & Interpretation\\
+        \hline\hline
+        $<3$ & No edvidence for $H_i$ over $H_j$\\
+        $>3$ & Positive edvidence for $H_i$\\
+        $>20$ & Strong edvidence for $H_i$\\
+        $>150$ & Very strong edvidence for $H_i$\\\hline
+    \end{tabular}
+\end{center}
 \end{document}

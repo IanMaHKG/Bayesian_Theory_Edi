@@ -7,3 +7,4 @@
 \contentsline {section}{\numberline {7}Point Estimates}{5}%
 \contentsline {section}{\numberline {8}Interval Estimates}{6}%
 \contentsline {section}{\numberline {9}Classic Hypothesis Testing}{6}%
+\contentsline {section}{\numberline {10}Bayesian Hypothesis Testing}{6}%
