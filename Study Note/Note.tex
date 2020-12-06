@@ -43,12 +43,14 @@
 \newcommand{\diag}{\text{diag}}
 \newcommand{\transpose}[1]{#1^\mathsf{T}}
 \newcommand{\Prob}[1]{\mathbb{P}(#1)}
-\newcommand{\Expect}[1]{\mathbb{E}(#1)}
-\newcommand{\Var}[1]{\text{Var}(#1)}
-\newcommand{\Cov}[1]{\text{Cov}(#1)}
+\newcommand{\Expect}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\Var}[1]{\text{Var}\left[#1\right]}
+\newcommand{\Cov}[1]{\text{Cov}\left[#1\right]}
 
 %Set the course name here
-\newcommand{\coursename}{Honours Algebra}
+\newcommand{\coursename}{Bayesian Theory}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 \usepackage{tcolorbox}
 \tcbuselibrary{theorems}
@@ -164,5 +166,137 @@ $$\text{Posterior Distribution: } p(\theta|y) = \frac{f(y|\theta)\pi(\theta)}{\i
     \text{Prior Predictive Distribution} &\text{:} &p(y^{new}) &= \int_\theta f(y^{new}|\theta)\pi(\theta)d\theta\\
     \text{Posterior Predictive Distribution} &\text{:} &p(y^{new}|y^{old}) &= \int_\theta f(y^{new}|\theta,y^{old})p(\theta|y^{old})d\theta
 \end{align*}
+\subsection*{Bayes Theorem for Multiple Parameters $\Theta = \{\theta_1,...,\theta_q\}$}
+$$\Prob{\Theta|\bm{y}} = \frac{\Prob{\bm{y}|\Theta}\Prob{\Theta}}{\Prob{\bm{y}}} \propto \Prob{\bm{y}|\Theta}\Prob{\Theta}$$
 
+% Week 2 
+\newpage
+\section{Conjugate Priors}
+\begin{center}
+    \begin{tabular}{|l|c|l|}
+        \hline
+        Sample Distribution & Parameter & Prior\\
+        \hline\hline
+        Bernoulli$(\theta)$ & $\theta$ & Beta$(\alpha,\beta)$\\
+        \hline
+        Binomial$(n,\theta)$ & $\theta$ & Beta$(\alpha,\beta)$\\
+        \hline
+        Poisson$(\theta)$ & $\theta$ & Gamma$(\alpha,\beta)$\\
+        \hline
+        Exponential$(\theta)$ & $\theta$ & Gamma$(\alpha,\beta)$\\
+        \hline
+        Normal$(\mu,\sigma_0^2)$ & $\mu$ & Normal$(\mu_h,\sigma_h^2)$\\
+        \hline
+        Normal$(\mu_0,\sigma^2)$ & $\sigma^2$ & Inverse Gamma$(\alpha,\beta)$\\
+        \hline
+        Normal$(\mu_0,1/\tau)$ & $\tau = 1/\sigma^2$ & Gamma$(\alpha,\beta)$\\
+        \hline
+    \end{tabular}
+\end{center}
+\section{Normal Distribution Priors}
+    \subsection*{Unknown $\mu$, known $\sigma^2$}
+    \begin{itemize}
+        \item Sample $\bm{y} \in \mathbb{R}^n$
+        \item Prior $\mu \sim \text{Normal}(\mu_0,\sigma_0^2) = \text{Normal}\left(\mu_0,\frac{\sigma^2}{m}\right) \Rightarrow m = \sigma^2/\sigma_0^2$
+        \item Posterior: $$\mu|\bm{y},\sigma^2 \sim \text{Normal}\left( \frac{m\mu_0 + n\bar{y}}{m+n} , \frac{\sigma^2}{m+n} \right) = \text{Normal}\left( (1-w)\mu_0 + w\bar{y} , \frac{\sigma^2}{m+n} \right)$$
+            $w = \frac{m}{m+n}$
+    \end{itemize}
+    \subsection*{Unknown $\mu$, known $\tau$}
+    \begin{itemize}
+        \item Sample $\bm{y} \in \mathbb{R}^n$
+        \item Prior $\mu \sim \text{Normal}\left(\mu_0,\frac{\sigma^2}{m}\right) = \text{Normal}\left(\mu_0,\frac{1}{\tau m}\right)$
+        \item Posterior: $$\mu|\bm{y},\sigma^2 \sim \text{Normal}\left( \frac{m\mu_0 + n\bar{y}}{m+n} , \frac{1}{\tau(m+n)} \right) = \text{Normal}\left( (1-w)\mu_0 + w\bar{y} , \frac{1}{\tau(m+n)} \right)$$
+            $w = \frac{m}{m+n}$
+    \end{itemize}
+    \subsection*{Unknown $\tau$, known $\mu$}
+    \begin{itemize}
+        \item Sample $\bm{y} \in \mathbb{R}^n$
+        \item Prior $\tau \sim \text{Gamma}(\alpha,\beta)$
+        \item Posterior: $$\tau|\bm{y},\mu \sim \text{Gamma}\left(\alpha + \frac{n}{2}, \beta + \frac{z^2}{2}\right)$$
+            $z^2 = \sum_i(y_i - \mu)^2$
+    \end{itemize}
+    \subsection*{Unknown $\sigma^2$, known $\mu$}
+    \begin{itemize}
+        \item Sample $\bm{y} \in \mathbb{R}^n$
+        \item Prior $\mu,\sigma^2 \sim \text{Normal}\left(\mu_0, \frac{\sigma^2}{\kappa}\right) \times \text{Inverse Gamma}(\alpha, \beta)$
+        \item Posterior: $$\mu, \sigma^2|\bm{y} \sim \text{Normal}\left(\frac{\kappa\mu_0 + n\bar{y}}{\kappa + n},\frac{\sigma^2}{\kappa + n}\right) \times \text{Inverse Gamma}\left(\alpha + \frac{n}{2}, \beta + \frac{(n-1)s^2}{2} + \frac{\kappa n(\bar{y} - \mu_0)^2}{2(\kappa + n)}\right)$$
+            $s^2 = \sum_i(y_i - \bar{y})^2/(n-1)$\\
+            $\kappa = \sigma^2(\alpha-1)/\beta$ or given (seriously it's not written anywhere Ken, I'm just guessing here man)
+    \end{itemize}
+
+% Week 4
+\section{Jeffrey's Prior}
+    \subsection*{Definition}
+    Jeffery Prior: $\pi_{JP}(\theta) \propto \sqrt{I(\theta|y)}$
+    \\Fisher Information:
+    $$I(\theta|y) = \Expect{\left( \frac{d \log f(y|\theta)}{d\theta} \right)^2} = -\Expect{ \frac{d^2 \log f(y|\theta)}{d\theta^2}}$$
+    \subsection*{1:1 transformation of Jeffrey's Prior}
+    $$\pi(\phi) = \pi_{JP}(\theta)\left| \frac{d \theta}{d \phi}\right|$$
+    \subsection*{Jeffrey's Prior for Multivariate Parameter Vector}
+    Gradient of log likelihood:
+    $$ S(\bm{\theta}) = \begin{bmatrix*}
+        \partial_{\theta_1} \log f(x)\\
+        \vdots\\
+        \partial_{\theta_n} \log f(x)
+    \end{bmatrix*}$$
+    Hessian Matrix of log likelihood:
+    $$H(\bm{\theta}) = \text{Jacobian}\left[S(\bm{\theta})\right] = \begin{bmatrix*}
+        \partial_{\theta_1}\partial_{\theta_1} \ln f(x) & \cdots & \partial_{\theta_1}\partial_{\theta_n} \ln f(x)\\
+        \vdots & \ddots & \vdots\\
+        \partial_{\theta_n}\partial_{\theta_1} \ln f(x) & \cdots & \partial_{\theta_n}\partial_{\theta_n} \ln f(x)
+    \end{bmatrix*}$$
+    Fisher Information: $I(\theta|x) = -\Expect{H(\theta)}$\\
+    Jeffrey's Prior: $\pi_{JP} \propto \sqrt{\det(I(\theta|x))}$
+
+\newpage
+\section{Reference Prior}
+    \subsection*{Kullback-Leibler  (KL)  divergence}
+    A measure of the difference between two pmfs/pdfs. When $KL(f,g) = 0$, the two distributions are idetical.
+        \subsubsection*{Properties}
+        \begin{itemize}
+            \item $KL(f,g) \neq KL(g,f)$
+            \item $KL(fmg) \geq 0$
+        \end{itemize}
+        \subsubsection*{Continous parameter $x$}
+        $$KL(f,g) = \int \ln\left[\frac{f(x)}{g(x)}\right]dx = \mathbb{E}_f[\log f(X)] - \mathbb{E}_g[\log f(X)]$$
+        \subsubsection*{Discrete parameter $x$}
+        $$KL(f,g) = \sum_{x\in X} \ln\left[\frac{f(x)}{g(x)}\right] = \mathbb{E}_f[\log f(X)] - \mathbb{E}_g[\log f(X)]$$
+    \subsection*{Reference Prior} Read week 4 notes (2.2)
+
+% Week 5
+\section{Point Estimates}
+	\subsection*{Components of Decision Theory with emphasis on parameter estimation}
+		\begin{itemize}
+			\item State Spcae $\Theta$, unknown true value $\theta \in \Theta$
+			\item Action Space $\mathcal{A} \ni a$, sometimes $\mathcal{A} = \Theta$
+			\item Sampling Distribution $f(\bm{y}| \theta)$
+			\item Loss Function $\mathcal{L}(a|\theta)$
+			\item Risk $R_\theta(a|\bm{y}) = \mathbb{E}_\theta[L(a|\theta,y)] = \int_{\theta \in \Theta} \mathcal{L}(a|\theta)p(\theta|\bm{y})d\theta$
+			\item Bayes Estimator of a parameter $\hat{\theta}_{BE} = \argmin_{\hat{\theta} \in \Theta} R_\theta(\hat{\theta}|\bm{y})$
+		\end{itemize}
+	\subsection*{Common Loss Functions and Corresponding Estimators}
+	 \begin{itemize}
+		 \item \textbf{Squared Error Loss}: $\mathcal{L}(\theta|\hat{\theta}) = (\theta - \hat{\theta})^2$, Bayes Estimator $\hat{\theta} = \Expect{\theta|\bm{y}}$
+		 \item \textbf{Absolute Error Loss}: $\mathcal{L}(\theta|\hat{\theta}) = |\theta - \hat{\theta}|$, Bayes Estimator $\hat{\theta} = \theta_{0.5}$, ($\Prob{\theta \leq \theta_{0.5}} = 0.5$)
+		 \item \textbf{0-1 Loss}: $\mathcal{L}(\theta|\hat{\theta}) = I(\theta \neq \hat{\theta})$, Bayes Estimator $\hat{\theta}$ is the posterior mode
+	 \end{itemize}
+
+\newpage
+\section{Interval Estimates}
+	$$P\times 100\% \text{ Bayesian Credible interval} =[LB, UB] \text{ where } \int_{LB}^{UB} p(\theta,\bm{y})d\theta = P$$
+	If loooking for one side-confidence bounds then $LB = -\infty$ or $UB = \infty$
+	\subsection*{Symmetric Credicble Interval}
+		$$[LB,UB] \text{ where } \Prob{\theta \leq LB} = \Prob{\theta \geq UB} = \alpha/2 = (1-P)/2$$
+	\subsection*{Highest Posterior Density Interval (HPDI)}
+		Credible Interval where all values outside the interval has a density smaller than any of the values in the interval.
+	\subsection*{Credible Regions}
+        $$\iint p(\theta_1, \theta_2| \bm{y})d\theta_1 d\theta_2 = 1 - \alpha = P$$ 
+
+\section{Classic Hypothesis Testing}
+    \begin{enumerate}
+        \item Assume hypothesis $H_0$ is true
+        \item Calculate test statistic $T(\bm{y}_{obs})$ based on observed sample data regarding to $H_0$ and $H_1$
+        \item Conditional on $H_0$ being true, $p$-value $= \Prob{T(\bm{y})\text{ more extreme than } T(\bm{y}_{obs})|\theta, H_0}$
+        \item Reject $H_0$ and accept $H_1$ for sufficiently small $p$-values, do not reject $H_0$ otherwise
+    \end{enumerate}
 \end{document}
