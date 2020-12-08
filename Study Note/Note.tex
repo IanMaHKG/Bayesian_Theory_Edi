@@ -431,5 +431,34 @@ Many Bayesian integrals can be viewed as expectations, such as probabilities and
 
 \newpage
 \subsection*{Rejection Sampling}
+Target distribution $p(\theta|\bm{y})$
+\begin{itemize}
+    \item Generates independent samples form envelope distribution $g(\theta)$
+    \item Only some generated values are kept/used, while the rest are discarded
+    \item Often used for generating univariate random variables than a multivariate random vector
+\end{itemize}
+    \subsubsection*{General Rejection Algorithm}
+    For target distribution $p()\theta$ and envelope $g(\theta)$, the (upper) bound $M$ pf $p/g$ is defined:
+    $$M \geq \frac{p(\theta)}{g(\theta)} \quad \forall \theta \Leftrightarrow M(g)\theta \geq p(\theta)$$
+    The Algorithm to generate a single value form $p(\theta)$ is as follows:
+    \begin{enumerate}
+        \item Generate $\theta^*$ from $g(\theta^*)$
+        \item Generate $u$ form Uniform$(0,Mg(\theta^*))$
+        \item If $u \leq p(\theta^*)$ keep $\theta^*$ else reject and return step 1
+    \end{enumerate}
+    The acceptance rate is $\frac{1}{M}$ which $M$ is defined as above. For optimal acceptance rate, we choose $M_{opt} = \sup\left\{\frac{p(\theta)}{g(\theta)}\right\}$
 
+\subsection*{Importance Sampling}
+    Simlar to Rejection sampling. However, we adjust the values to correspond to the rightr distribution instead of rejecting them. Therefore all generated $\theta$ are kept, there's no rejection.
+    \\~\\Suppose there is another distribution has the same support as $p(\theta|\bm{y})$, the integral then can be written as $\mathbb{E}_p[h(\theta|\bm{y})] = \mathbb{E}_g[h(\theta)w(\theta)]$ where $w(\theta) = p(\theta|\bm{y})/g(\theta)$ is the \textbf{importance ratio}.
+    \\~\\ The Monte Carlo estimats can be calculated $\hat{\mathbb{E}}_p[h(\theta|\bm{y})] \equiv \hat{\mathbb{E}}_g[h(\theta)w(\theta)] = \frac{1}{N}\sum h(\theta^i)w(\theta^i)$
+
+\subsection*{Sampling Importance Re-Sampling}
+\subsubsection*{Algorithm for generating a samplem sixe of $n$}
+\begin{enumerate}
+    \item Choosing $N > n$. generate $N$ samples of $\theta^i, i = 1,...,N$ form the envolope distribution (importance sampler) $g(\theta)$
+    \item Calculate the importance ratio $w_i = p(\theta^i|\bm{y})/g(\theta)$, then scale by the some of weights:
+        $$w^{*i} = \frac{w^i}{\sum_j^N w^j}$$
+    \item randomly sample $n$ $\theta^i$'s with replacement, with probabilities $w^{*1},...,w^{*N}$
+\end{enumerate}
 \end{document}
