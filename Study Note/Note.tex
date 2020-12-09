@@ -461,4 +461,46 @@ Target distribution $p(\theta|\bm{y})$
         $$w^{*i} = \frac{w^i}{\sum_j^N w^j}$$
     \item randomly sample $n$ $\theta^i$'s with replacement, with probabilities $w^{*1},...,w^{*N}$
 \end{enumerate}
+
+\newpage
+\section{Markov Chain Monte Carlo (MCMC)}
+    \subsection*{Overwiew}
+        \begin{itemize}
+            \item \textbf{Dependent Samples}: $\theta|\bm{y}$
+            \item \textbf{Iterative Conditional Generation}: $g(\theta^{i}|\theta^{i-1})$
+            \item \textbf{Burn-in}: The initial vales $\theta^1,...,\theta^B$ are not distributed according to th target distribution $p(\theta)$, therefore would be discarded
+            \item \textbf{Sample for Inference}: The additional $N - B$ samples $\theta^{B+1},...,\theta^N$ are used for inference
+        \end{itemize}
+    \subsection*{Markov Chain}
+        \begin{itemize}
+            \item \textbf{State Space} $S$: is a set of all possible states $j$
+            \item \textbf{Process} $\theta^t = j$: process at time $t$ is in state $j$
+        \end{itemize}
+        \subsubsection*{Definition}
+        \begin{align*}
+            \Prob{\theta^0 = x_0,..., \theta^T = x_T} &= \Prob{\theta^T = x_T|\theta^0 = x_0,...,\theta^{T-1} = x_{T-1}}\\
+                &\times \Prob{\theta^{T-1} = x_{T-1}|\theta^0 = x_0,...,\theta^{T-2} = x_{T-2}}\\
+                &\times \Prob{\theta^0 = \theta_0}
+        \end{align*} 
+        \textbf{Markov Peoperty}: if $\theta^t|\theta^{t-1}$ is independent to other values, then\\$\Prob{\theta^T = x_T|\theta^0 = x_0,...,\theta^{T-1} = x_{T-1}} = \Prob{\theta^T = x_T|\theta^{T-1} = x_{T-1}}$. Therefore:
+        $$\Prob{\theta^0 = x_0,..., \theta^T = x_T} = \prod_{t=1}^T\Prob{\theta^{t} = x_t|\theta^{t-1} = x_{t-1}} \times \Prob{\theta^0 = x_0}$$
+        The sequence of random variables $\theta^1,..., \theta^K$ with Markov Property is a Markov Chain
+        \subsubsection*{Terminology and Notation}
+        \begin{itemize}
+            \item \textbf{One-Step Transistion Probability} $p_{ij}^t = \Prob{\theta^t = j|\theta^{t-1} = i}$
+            \item if $p_{ij}^t = p_{ij}\ \forall t$ then the chain is \textbf{time homogeneous} otherwise \textbf{time imhomogeneous}
+            \item \textbf{Transistion probability matrix} $(P_t)_{ij} = p_{ij}$, where each row sums to one 
+                \subitem for a time homogeneous chain $P_t = P \ \forall t$
+        \end{itemize}
+        \newpage
+        \subsubsection*{Limiting Behaviour of Markov Chain}
+        \begin{itemize}
+            \item \textbf{Recurrent State}: state where a Markov Chain returns with probability 1
+            \item \textbf{Nonnull State}: state where it will eventually recurrence in a finite ecpected time
+            \item \textbf{Irreducible Markov Chain}: $\exists m \in \mathbb{N} \suchthat \Prob{\theta^{m +n} = j| \theta^n = i} > 0 \ \forall i$
+            \item \textbf{Periodic Markov Chain}: $\exists m \in \mathbb{N} \suchthat \exists d \in \mathbb{d} \suchthat \Prob{\theta^{m +n} = j| \theta^n = i} > 0 \cap m/d \in \mathbb{Z^+}  \ \forall i$
+                \subitem otherwise \textbf{Aperiodic Markov Chain}
+            \item \textbf{Ergodic Markov Chain}: \textbf{Irreducible}, \textbf{aperiodic}, all states are \textbf{nonnull} and \textbf{recurrent}
+        \end{itemize}
+
 \end{document}
