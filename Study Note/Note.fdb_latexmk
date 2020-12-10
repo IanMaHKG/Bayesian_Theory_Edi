@@ -1,9 +1,9 @@
 # Fdb version 3
-["pdflatex"] 1607540116 "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.tex" "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.pdf" "Note" 1607540536
+["pdflatex"] 1607574525 "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.tex" "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.pdf" "Note" 1607574525
   "/etc/texmf/web2c/texmf.cnf" 1588438941 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/ian/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk" 1588439839 14040 eb065bfa625b4fe8c9dda8d2d5f14f84 ""
-  "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.aux" 1607540116 1481 4677fcf275b7d2a96c88673501a865b6 ""
-  "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.tex" 1607540536 27206 a9cb23c4bf3166efb974d00bdc1d55bb ""
+  "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.aux" 1607574525 1701 774d79e72a25ee009fb9386cfa7d55ce ""
+  "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.tex" 1607574524 37899 531f68c4f95188dfc4e60c07428bef4f ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
@@ -164,6 +164,7 @@
   "/usr/share/texlive/texmf-dist/tex/latex/tcolorbox/tcolorbox.sty" 1573854158 85328 ceb41649f3dfe798c9d3c0402e87f6f1 ""
   "/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty" 1580683321 12671 ace2aac118748ea10d1717448ecafbed ""
   "/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty" 1580683321 10216 5efd55f2010055e7b7875afd6a75be82 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/tools/multicol.sty" 1580683321 31532 04852e45d7c17cb384689d2f83b628d3 ""
   "/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty" 1580683321 7308 a7fb09b68a4a07a482e876fbe2959b04 ""
   "/usr/share/texlive/texmf-dist/tex/latex/trimspaces/trimspaces.sty" 1253232110 1380 971a51b00a14503ddf754cab24c3f209 ""
   "/usr/share/texlive/texmf-dist/tex/latex/varwidth/varwidth.sty" 1238697683 10894 d359a13923460b2a73d4312d613554c8 ""
@@ -173,13 +174,13 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1583234869 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1603430679 165012 f177baa1c39a3ebd62c3096a43521a0d ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1603430682 4898729 b399627536ba58a8d394162836abec3f ""
-  "Note.aux" 1607540116 1481 4677fcf275b7d2a96c88673501a865b6 ""
-  "Note.tex" 1607540536 27206 a9cb23c4bf3166efb974d00bdc1d55bb ""
-  "Note.toc" 1607540116 867 300ebe37db6f70b25fb4142e5d9ec514 ""
+  "Note.aux" 1607574525 1701 774d79e72a25ee009fb9386cfa7d55ce ""
+  "Note.tex" 1607574524 37899 531f68c4f95188dfc4e60c07428bef4f ""
+  "Note.toc" 1607574525 1005 8912632dda6eaa021d4b8b6c60edff79 ""
   (generated)
   "Note.log"
-  "Note.toc"
   "Note.aux"
   "Note.pdf"
   "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.pdf"
   "/home/ian/Documents/Bayesian_Theory_Edi/Study Note/Note.log"
+  "Note.toc"

@@ -10,6 +10,7 @@
 \usepackage{mathtools}
 \usepackage[margin=0.75in]{geometry}
 \usepackage{pgfpages}
+\usepackage{multicol}
 % % For shrinking 4 pages to 1
 % \pgfpagesuselayout{4 on 1}[a4paper, border shrink=0mm]
 % 2 in 1
@@ -45,7 +46,7 @@
 \newcommand{\Prob}[1]{\mathbb{P}(#1)}
 \newcommand{\Expect}[1]{\mathbb{E}\left[#1\right]}
 \newcommand{\Var}[1]{\text{Var}\left[#1\right]}
-\newcommand{\Cov}[1]{\text{Cov}\left[#1\right]}
+\newcommand{\Cov}[1]{\text{Cov}\left(#1\right)}
 \newcommand{\MonteCarlo}[1]{\hat{\mathbb{E}}\left[#1\right]}
 
 %Set the course name here
@@ -64,11 +65,11 @@
 \newtheorem{example}{EXAMPLE}[subsection]
  
 \lhead{\coursename}
-\rhead{Quick Notes}
+\rhead{Study Note}
 
-\title{\coursename\\Quick Notes}
+\title{\coursename\\Study Note}
 \author{Ian S.W. Ma}
-\date{Spring 2020}
+\date{Winter 2020}
 
  
  
@@ -391,7 +392,7 @@ $$\int_{x_i}^{x_{i+m}} f(x) dx \approx \sum_{j=1}^m w_{ij} f(x_{i+j})$$
 \begin{align*}
     \text{Expectaqtion }\Expect{\theta} &= \int\theta p(\theta) d\theta\\
     \text{Samples of } \theta &: \theta_1,...,\theta_N\\
-    \Rightarrow \text{Monte Carlo Estimae } \hat{\mathbb{E}}[\theta] &= \frac{1}{N}\sum_{i=1}^N \theta_i \approx \Expect{\theta}
+    \Rightarrow \text{Monte Carlo Estimate } \hat{\mathbb{E}}[\theta] &= \frac{1}{N}\sum_{i=1}^N \theta_i \approx \Expect{\theta}
 \end{align*}
 By the Law of Large Numbers, $\Prob{\lim_{N \rightarrow \infty} \hat{\mathbb{E}}\left[\theta\right] = \Expect{\theta}} = 1$.
 \\~\\
@@ -502,5 +503,160 @@ Target distribution $p(\theta|\bm{y})$
                 \subitem otherwise \textbf{Aperiodic Markov Chain}
             \item \textbf{Ergodic Markov Chain}: \textbf{Irreducible}, \textbf{aperiodic}, all states are \textbf{nonnull} and \textbf{recurrent}
         \end{itemize}
+        \subsubsection*{Marginal amd Stationary Distributoin}
+        \begin{itemize}
+            \item \textbf{Marginal Probability Distribution} for state at time $t$ is denoted $\bm{\pi}_t$, which is a vector of probabilities that sum to one
+            \item $(\pi_t)_i = \bm{\pi}_t(i) = \Prob{\theta^t = i}$
+            \item $\bm{\pi}_{t+1}^\top = \bm{\pi}_{t}^\top P \Leftrightarrow \bm{\pi}_{t+1} = P^\top \bm{\pi}_{t}$
+            \item If $\bm{\pi}^\top P = \bm{\pi}^\top$ then $\bm{\pi}$ is a \textbf{stationa distribution}
+        \end{itemize}
+        \subsubsection*{Reversible Markov Chain}
+        If a time homogeneous Markov Chain with tpm $P$ and Stationary distribution $\bm{\pi}$ fufill the \textbf{Detailed Balance equation} then it is a reversible Markov Chain.
+        \\~\\\textbf{Detailed Balance equation} is written $\bm{\pi}(i)p_{ij} = \bm{\pi}(j)p_{ji}$
+        \subsubsection*{Key Theoretical Results}
+        If a Markov Chain with tpm $P$ and is irreducible, aperiodic and has a stationary distribution $\bm{\pi}$, the the followings are true:
+        \begin{itemize}
+            \item $\bm{\pi}$ is unique, $\exists! \bm{\pi} \suchthat \bm{\pi}^\top P = \bm{\pi}^\top$
+            \item $\lim_{n \rightarrow \infty} \Prob{\theta^{t+n} = j| \theta^t = i} = \bm{\pi}(j)$
+            \item $\bm{\pi}$ is the follows solution to the following program:
+                \begin{align*}
+                    \sum_{i \in S} \bm{\pi}(i) &= 1\\
+                    \bm{\pi}(j) &= \sum_{i \in S} \bm{\pi}(i)p_{ij}\\
+                    \text{Subject to} &: \bm{\pi}(j) \geq 0 \ \forall j \in S
+                \end{align*}
+        \end{itemize}
 
+\newpage
+\section{Metropolis-Hasting Algorithm}
+    \subsection*{Steps}
+    Iteration $t$ gievn sample $\Theta^{t-1}$:
+    \begin{enumerate}
+        \item Generate candidate value $\Theta^c$ from proposal distribution $q(\Theta^c|\Theta^{t-1})$
+        \item Calculate Metropolis Hasting Ratio (MHR) aka. accpetance rate if $< 1$:
+        $$\text{MHR}(\Theta^{t-1}, \Theta^C) = \frac{p(\Theta^c)q(\Theta^{t-1}|\Theta^c)}{p(\Theta^{t-1})q(\Theta^c|\Theta^{t-1})}$$
+        \item Generate $u \sim \text{Uniform}(0,1)$
+        \item if $u \leq \min(1,\text{MHR}(\Theta^{t-1}, \Theta^C))$, then $\Theta^t = \Theta^c$ (Keep $\Theta^c$) Otherwise $\Theta^t = \Theta^{t-1}$
+        \item Set $t = t+1$, return step 1
+    \end{enumerate}
+    \subsection*{Special case proposals}
+        \subsubsection*{Random walks ($\theta^c = \theta^c + \epsilon$)}
+        Special cases for $\epsilon$: $\epsilon \sim \begin{cases}
+            \text{Normal}(0,\sigma^2)\\
+            t_2\ _{df}\\
+            \text{Uniform}(-b,b)
+        \end{cases}$ where $q(\theta^c|\theta^o) = q(\theta^o|\theta^c) \Rightarrow \text{MHR}(\theta^o, \theta^c) = \frac{p(\theta^c)}{p(\theta^o)}$
+        \subsubsection*{Independence proposals}
+        $$\text{MHR}(\theta^o, \theta^c) = \frac{p(\theta^c)q(\theta^o)}{p(\theta^o)q(\theta^c)}$$
+    \subsection*{Multidimentional $\Theta$: One-at-a-time updats}
+    let $\Theta_U^{t+1},\Theta_0^{t} \subset \Theta$ be the set of updated or yet to be updated $\theta \in \Theta$. Then:
+    $$\text{MHR}(\theta_i^t, \theta_i^c) = 
+    \frac{p(\Theta_U^{t+1},\theta_i^c,\Theta_0^{t}\backslash \{\theta_i^c\}) q(\theta_i^t|\Theta_U^{t+1},\theta_i^c,\Theta_0^{t}\backslash \{\theta_i^c\})}
+    {p(\Theta_U^{t+1},\Theta_0^{t}) q(\theta_i^c|\Theta_U^{t+1},\Theta_0^{t})}$$
+
+\newpage
+\section{MCMC Diagnostics}
+    \subsection*{Notations}
+        \begin{itemize}
+            \item \textbf{Burn-in Length} $B$\\ The idea burn-in length $B$ is the point where the chain is converged (aka. future values will be in the limiting distribution)
+            \item \textbf{Trace plots/Sample paths}\\ A time series plot of chains of generated values
+        \end{itemize}
+    \subsection*{Multiple Chains}
+    The reason to plot multiple chains for a single random values is that a random variable $\theta$ may have multiple modes $\theta_1,...$, therefore we would like to capture as many as possible. A plot of such chains does not prove convergence, but instead can indicates a lack of convergence.
+    \\~\\Let's say variables $\theta_1,...,\theta_K$ converge at $B = \{B_1,...,B_K\}$ respectively, then we say any sample length $N \geq \max B$ would indicates a "good mixing"
+    \\~\\A more quantitive assesement of a good mixing/lack of convergence is the \textbf{Brooks-Gelman-Rubin} (BGR) statistics, and is defined as below:
+    $$R = \frac{\text{Width of 80\% credible interval of all chains combined}}{\text{Average width of 80\% credible interval for each chain}}$$
+    If the chain has converged, $R \approx 1$. If the chains have yet been converged then $R > 1$
+    \subsection*{Variance of Monte Carlo Estimate $\MonteCarlo{\theta}$}
+        \subsubsection*{Notation}
+        \begin{itemize}
+            \item $\gamma_k = \Cov{\theta^i,\theta^{i+k}}$: autocovariance of lag $k \geq 0$ of the chain
+            \item $\sigma^2 = \gamma_0$: variance if the chain
+            \item $\rho_k = \gamma_k / \sigma^2$: autocorrelation of lag $k$
+            \item $\tau_n^2/n$: Variance of $\MonteCarlo{\theta}$
+        \end{itemize}
+        \begin{align*}
+            \Var{\MonteCarlo{\theta}} &= \frac{\tau_n^2}{n}\\\tau_2^2 &= \sigma^2 \left[1 + 2 \sum_{k=1}^n \frac{n-k}{n}\rho_k\right]\ \text{(Ineffiency factor/ Integrated autocorrelation)}
+        \end{align*}
+        As $n \rightarrow \infty$:
+        $$\tau_2^2 = \sigma^2 \left[1 + 2 \sum_{k=1}^n \frac{n-k}{n}\rho_k\right] \approx \sigma^2 \left(1 + 2 \sum_{k=1}^\infty \rho_k\right) \Rightarrow \Var{\MonteCarlo{\theta}} \approx \frac{\sigma^2 \left(1 + 2 \sum_{k=1}^\infty \rho_k\right)}{n}$$
+        \newpage
+        \subsubsection*{Effective Sample Size, ESS}
+        $$n_{eff} = \frac{n}{1+ 2\sum_{k=1}^n\rho_k} \ \Rightarrow\ \Var{\MonteCarlo{\theta}} \approx \frac{\sigma^2}{n_{eff}}$$
+        \subsubsection*{Autocorrelation Plots}
+        $$\hat{\rho}_k = \frac{\hat{\gamma}_k}{\hat{\sigma^2}} = \frac{\sum_{i=1}^{n-1} \left(\theta^i - \bar{\theta}\right)\left(\theta^{i+k} - \bar{\theta}\right)}{\sum_{i=1}^n\left(\theta^i - \bar{\theta}\right)^2}, \quad \bar{\theta} \text{ is the sample average}$$
+        \subsubsection*{Central Limit Theorem for $\MonteCarlo{\theta}$}
+        $$\MonteCarlo{\theta} \sim \text{Asymptotically Normal}\left(\Expect{\theta}, \frac{\sigma^2}{n_{eff}}\right) \Rightarrow \frac{\MonteCarlo{\theta} - \Expect{\theta}}{\sigma/\sqrt{n_{eff}}} \sim \text{Normal}(0,1)$$
+        \subsubsection*{Estimating $\Var{\MonteCarlo{\theta}}$}
+        Batching is a popular method for estimating $\Var{\MonteCarlo{\theta}}$, whe algorithm is as below:
+        \begin{enumerate}
+            \item Partition chain of length $n$ into $m$ batches of $T\in [10,30]$ successive values
+            \item For each batch calculate the mean of the values $\bar{\theta}_i$
+            \item Estimate of $\Var{\MonteCarlo{\theta}}$ is then calculated:
+                $$\hat{\frac{\tau^2}{n}} = \frac{\frac{T}{m-1}\sum_{i=1}^m\left(\bar{\theta}_i - \bar{\theta}\right)^2}{n}$$
+        \end{enumerate}
+        \subsubsection*{Improve Performance}
+        \begin{itemize}
+            \item Changing proposal distribution
+            \item Reparameterising model
+            \item Blocking
+        \end{itemize}
+    \newpage
+    \subsection*{Gibbs Sampler}
+    Can be seen as a special case of a Metropolis-Hasting sampler with two features:
+    \begin{itemize}
+        \item The proposal distributions are conditional distributions for $\theta$'s
+        \item All candidates values are accepted (MHR$(\theta_i^t,\theta_i^c) = 1$)
+    \end{itemize}
+        \subsubsection*{The Algorithm}
+        \begin{enumerate}
+            \item Let $\Theta = (\theta_1,...,\theta_q) \sim p(\Theta)$
+            \item For $i \in 1,..,q$ denote thr full conditional distribution for $\theta_i$ by
+                $$p(\theta_i|\theta_{-i}) = p(\theta_i|\theta_1,...,\theta_{i-1}, \theta_{i+1},...,\theta_q)$$
+            \item Initialise chain $\Theta^0 = (\theta_1^0,...,\theta_q^0)$
+            \item At iteration $t+1$ given $\Theta^{t}$, $\Theta^{t+1}$ is generated as follows:
+                \begin{itemize}[topsep = 0px]
+                    \item Generate $\theta_1^{t+1}$ from $p(\theta_1|\theta_2^{t},...,\theta_q^{t})$
+                    \\ \vdots
+                    \item Generate $\theta_i^{t+1}$ from $p(\theta_i|\theta_1^{t+1},...,\theta_{i-1}^{t+1},\theta_{i+1}^{t},...,\theta_q^{t})$
+                    \\ \vdots
+                    \item Generate $\theta_q^{t+1}$ from $p(\theta_i|\theta_1^{t+1},...,\theta_{q-1}^{t+1})$
+                \end{itemize}
+            \item The (joint) transistion probability of going from $\Theta^t$ to $\Theta^{t+1}$ is:
+                $$\mathcal{K}_{Gibbs}(\Theta^t,\Theta^{t+1}) = \prod_{i=1}^q p(\theta_i^{t+1}|\theta_j^{t+1}, j < i\ \cap\ \theta_j^{t}, j >i )$$
+                An the stationary distribution is the target $p(\Theta)$
+        \end{enumerate}
+        \subsubsection*{Gibbs Sampler vs Metropolis-Hasting}
+            \begin{multicols*}{2}
+                \textbf{Gibbs Sampler}
+                \begin{itemize}
+                    \item Strengths
+                    \begin{itemize}[topsep = 0pt]
+                        \item Automatically defined proposal dist.
+                        \item Accepts all candidate values
+                        \item views as an "adaptive algorithm"
+                    \end{itemize}
+                    \item Weaknesses
+                    \begin{itemize}[topsep = 0pt]
+                        \item Conditional distribution may not be tractable
+                        \item Sampling may be computationally intensive
+                        \item 100\% acceptance $\neq$ good mizing
+                    \end{itemize}
+                \end{itemize}
+                \vfill\null
+                \columnbreak
+                \textbf{Metropolis Hasting}
+                \begin{itemize}
+                    \item Strengths
+                    \begin{itemize}[topsep = 0pt]
+                        \item flexible proposal dist., can be fast sample from, fast to evaluate MHR
+                        \item Don't need to know conditional dist.
+                        \item easily block updating
+                    \end{itemize}
+                    \item Weaknesses
+                    \begin{itemize}[topsep = 0pt]
+                        \item Hard to find good proposal with good mixing
+                        \item Can take time to tune a proposal
+                    \end{itemize}
+                \end{itemize}
+            \end{multicols*}
 \end{document}
