@@ -1,15 +1,15 @@
-\contentsline {section}{\numberline {1}Statistics Basics}{1}%
-\contentsline {section}{\numberline {2}Bayes Throrem}{2}%
-\contentsline {section}{\numberline {3}Conjugate Priors}{3}%
-\contentsline {section}{\numberline {4}Normal Distribution Priors}{3}%
-\contentsline {section}{\numberline {5}Jeffrey's Prior}{4}%
-\contentsline {section}{\numberline {6}Reference Prior}{5}%
-\contentsline {section}{\numberline {7}Point Estimates}{5}%
-\contentsline {section}{\numberline {8}Interval Estimates}{6}%
-\contentsline {section}{\numberline {9}Classic Hypothesis Testing}{6}%
-\contentsline {section}{\numberline {10}Bayesian Hypothesis Testing}{6}%
-\contentsline {section}{\numberline {11}Deterministic Numerical Integration}{8}%
-\contentsline {section}{\numberline {12}Monte Carlo Integration}{9}%
-\contentsline {section}{\numberline {13}Markov Chain Monte Carlo (MCMC)}{11}%
-\contentsline {section}{\numberline {14}Metropolis-Hasting Algorithm}{13}%
-\contentsline {section}{\numberline {15}MCMC Diagnostics}{14}%
+\contentsline {section}{\numberline {1}Statistics Basics}{1}
+\contentsline {section}{\numberline {2}Bayes Throrem}{2}
+\contentsline {section}{\numberline {3}Conjugate Priors}{3}
+\contentsline {section}{\numberline {4}Normal Distribution Priors}{3}
+\contentsline {section}{\numberline {5}Jeffrey's Prior}{4}
+\contentsline {section}{\numberline {6}Reference Prior}{5}
+\contentsline {section}{\numberline {7}Point Estimates}{5}
+\contentsline {section}{\numberline {8}Interval Estimates}{6}
+\contentsline {section}{\numberline {9}Classic Hypothesis Testing}{6}
+\contentsline {section}{\numberline {10}Bayesian Hypothesis Testing}{6}
+\contentsline {section}{\numberline {11}Deterministic Numerical Integration}{8}
+\contentsline {section}{\numberline {12}Monte Carlo Integration}{9}
+\contentsline {section}{\numberline {13}Markov Chain Monte Carlo (MCMC)}{11}
+\contentsline {section}{\numberline {14}Metropolis-Hasting Algorithm}{13}
+\contentsline {section}{\numberline {15}MCMC Diagnostics}{14}
